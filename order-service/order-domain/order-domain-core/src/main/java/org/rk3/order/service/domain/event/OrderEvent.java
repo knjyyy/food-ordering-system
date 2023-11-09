@@ -1,0 +1,24 @@
+package org.rk3.order.service.domain.event;
+
+import org.rk3.event.DomainEvent;
+import org.rk3.order.service.domain.entity.Order;
+
+import java.time.ZonedDateTime;
+
+public abstract class OrderEvent  implements DomainEvent<Order> {
+    private final Order order;
+    private final ZonedDateTime createdAt;
+
+    public OrderEvent(Order order, ZonedDateTime createdAt) {
+        this.order = order;
+        this.createdAt = createdAt;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
+    }
+}
