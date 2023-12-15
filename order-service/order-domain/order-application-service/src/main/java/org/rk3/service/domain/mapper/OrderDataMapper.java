@@ -7,6 +7,8 @@ import org.rk3.order.service.domain.entity.Restaurant;
 import org.rk3.service.domain.dto.create.CreateOrderCommand;
 import org.rk3.service.domain.dto.create.CreateOrderResponse;
 import org.rk3.service.domain.dto.create.OrderAddress;
+import org.rk3.service.domain.dto.track.TrackOrderQuery;
+import org.rk3.service.domain.dto.track.TrackOrderResponse;
 import org.rk3.valueobject.*;
 import org.springframework.stereotype.Component;
 
@@ -35,10 +37,19 @@ public class OrderDataMapper {
                 .build();
     }
 
-    public CreateOrderResponse orderToCreateOrderResponse(Order order) {
+    public CreateOrderResponse orderToCreateOrderResponse(Order order, String message) {
         return CreateOrderResponse.builder()
                 .orderTrackingId(order.getTrackingId().getValue())
                 .orderStatus(order.getOrderStatus())
+                .message(message)
+                .build();
+    }
+
+    public TrackOrderResponse orderToTrackOrderResponse(Order order) {
+        return TrackOrderResponse.builder()
+                .orderTrackingId(order.getTrackingId().getValue())
+                .orderStatus(order.getOrderStatus())
+                .failureMessages(order.getFailureMessages())
                 .build();
     }
 

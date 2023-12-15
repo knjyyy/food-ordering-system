@@ -1,14 +1,40 @@
 package org.rk3.service.domain;
 
 import lombok.extern.slf4j.Slf4j;
+import org.rk3.exception.OrderNotFoundException;
+import org.rk3.order.service.domain.entity.Order;
 import org.rk3.service.domain.dto.track.TrackOrderQuery;
 import org.rk3.service.domain.dto.track.TrackOrderResponse;
+import org.rk3.service.domain.mapper.OrderDataMapper;
+import org.rk3.service.domain.ports.output.repository.OrderRepository;
+import org.rk3.valueobject.TrackingId;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @Component
 public class OrderTrackCommandHandler {
+
+    private final OrderDataMapper orderDataMapper;
+
+    private final OrderRepository orderRepository;
+
+    public OrderTrackCommandHandler(OrderDataMapper orderDataMapper, OrderRepository orderRepository) {
+        this.orderDataMapper = orderDataMapper;
+        this.orderRepository = orderRepository;
+    }
+
+    @Transactional(readOnly = true)
     public TrackOrderResponse trackOrder(TrackOrderQuery trackOrderQuery) {
-        return null;
+        Optional<Order> orderResult = orderRepository.findByTrackingId(new TrackingId(trackOrderQuery.getOrderTrackingId()));
+
+        if(orderResult.isEmpty()) {
+            log.warn("Could not find order with ID: {}", trackOrderQuery.getOrderTrackingId());
+            throw new OrderNotFoundException("Could not find order with ID: " + trackOrderQuery.getOrderTrackingId());
+        }
+
+        return orderDataMapper.orderToTrackOrderResponse(orderResult.get());
     }
 }
