@@ -12,7 +12,7 @@ import org.rk3.service.domain.ports.output.repository.RestaurantRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication(scanBasePackages = "com.rk3.service.domain")
+@SpringBootApplication(scanBasePackages = "org.rk3.service.domain")
 public class OrderTestConfiguration  {
 
     @Bean
@@ -46,7 +46,7 @@ public class OrderTestConfiguration  {
     }
 
     @Bean
-    public OrderDomainService orderDomaainService() {
+    public OrderDomainService orderDomainService() {
         return new OrderDomainServiceImpl();
     }
 }
